@@ -1,10 +1,11 @@
-MANIFEST
-README
 Changes
-Site.pm
+MANIFEST
+Makefile.PL
 Query.pm
+README
+Site.pm
 Template.pm
 WebBuilder.pm
-Site/google.tt2
-bin/sitequery
 test.pl
+bin/sitequery
+Site/google.tt2

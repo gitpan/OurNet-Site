@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 use strict;
 use Test;
 use vars qw/%sites %found/;
@@ -16,6 +16,7 @@ BEGIN {
 }
 
 use OurNet::Query;
+use Socket 'inet_aton';
 
 my ($query, $hits) = ('autrijus', 10);
 
@@ -23,20 +24,23 @@ while (my ($site, $file) = each %sites) {
     # Generate a new Query object
     ok(my $query = OurNet::Query->new($query, $hits, $file));
 
-    # Perform a query
-    my $found = $query->begin(\&callback, 30); # Timeout after 30 seconds
-
-    ok($found);
+    if (inet_aton('google.com')) {
+	# Perform a query
+	my $found = $query->begin(\&callback, 30); # Timeout after 30 seconds
+	ok($found);
+    }
+    else {
+	skip('not connected to google.com.', 1);
+    }
 }
 
-sub callback {
-    local $^W;
 
+sub callback {
     my %entry = @_;
     my $entry = \%entry;
 
     unless ($found{$entry{url}}++) {
-	print "[$entry->{title}]\n=> $entry->{url}\n\n";
+	print "[$entry->{title}]\n    => $entry->{url}\n";
     }
 }
 

@@ -1,7 +1,7 @@
 package OurNet::Site;
 require 5.005;
 
-$OurNet::Site::VERSION = '1.22';
+$OurNet::Site::VERSION = '1.52';
 
 use strict;
 
@@ -51,7 +51,7 @@ Note that it also takes Inforia Quest .fmt scripts, available at
 http://www.inforian.com/. The author of course cannot support this
 usage.
 
-As per v1.2, Site.pm also accepts Template Toolkit format templates
+As per v1.52, Site.pm also accepts Template Toolkit format templates
 with extention '.tt2' as site descriptors, provided that it contains
 at least one C<[% FOREACH entry %]> block, and C<[% SET url.start %]>
 accordingly.
