@@ -10,14 +10,11 @@ require 5.005;
 
 $OurNet::Template::VERSION = '0.02';
 
-use Template '2.00';
-use Template::Parser;
-
 use strict;
-use lib qw/./;
-use vars qw/@ISA $params @stack $idea/;
-
-@ISA = qw/Template/;
+use Template;
+use Template::Parser;
+use vars qw/$params @stack $idea/;
+use base qw/Template/;
 
 sub generate {
     my ($self, $params, $document) = @_;

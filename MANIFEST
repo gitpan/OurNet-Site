@@ -7,3 +7,4 @@ Template.pm
 WebBuilder.pm
 Site/google.tt2
 bin/sitequery
+test.pl

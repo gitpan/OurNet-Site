@@ -1,7 +1,7 @@
 package OurNet::Site;
 require 5.005;
 
-$OurNet::Site::VERSION = '1.21';
+$OurNet::Site::VERSION = '1.22';
 
 use strict;
 
@@ -73,10 +73,11 @@ conjunction with L<OurNet::Query>.
 # ---------------
 # Variable Fields
 # ---------------
+use vars qw/$Myself/;
+
 use fields qw/id charset proc expression template tempdata
               name info url var response category score
               allow_partial allow_tags tmplobj/;
-use vars qw/$myself/;
 
 # -----------------
 # Package Constants
@@ -127,6 +128,7 @@ sub new {
     die(ERROR_FILE_NEEDED . $file) if !(-e $file);
 
     $self->parse($file);
+    $self->{tempdata} = '';
 
     return $self;
 }
@@ -156,7 +158,8 @@ sub parse {
     if ($_[0] =~ m|\.tt2$|i) {
         local $/;
         my $content = <SITEFILE>;
-        require OurNet::Template;
+
+	require OurNet::Template;
         $self->{tmplobj} = OurNet::Template->new();
         $self->{tmplobj}->extract($content, undef, $self);
     }
@@ -342,18 +345,18 @@ sub contemplate {
 
         if (my $proc = $self->{proc}) {
             require Safe;
-            $myself ||= $self;
+            $Myself ||= $self;
 
             my $compartment = Safe->new();
-            $compartment->share(qw/$myself/);
+            $compartment->share(qw/$Myself/);
             $compartment->permit_only(qw/:base_core :base_mem pushre regcmaybe regcreset regcomp/);
 
-            $proc =~ s|_(\w+)_|\$myself->{response}[$rank - 1]{lc('$1')}|ig;
+            $proc =~ s|_(\w+)_|\$Myself->{response}[$rank - 1]{lc('$1')}|ig;
             $compartment->reval($proc);
         }
     }
 
-    undef $myself;
+    undef $Myself;
     return $self;
 }
 
@@ -387,7 +390,8 @@ sub callme {
 
 sub _quote {
     my $quoted;
-    foreach my $chunk (split(/({{.*?}})/, $_[0])) {
+
+    foreach my $chunk (split(/({{.*?}})/, $_[0] || '')) {
         if ($chunk =~ m|{{(.*?)}}|) {
             $quoted .= $1;
         }
@@ -395,6 +399,7 @@ sub _quote {
             $quoted .= quotemeta($chunk);
         }
     }
+
     return $quoted;
 }
 

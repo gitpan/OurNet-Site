@@ -1,11 +1,10 @@
 package OurNet::Query;
 require 5.005;
 
-$OurNet::Query::VERSION = '1.0';
+$OurNet::Query::VERSION = '1.22';
 
 use strict;
-use lib  qw/./;
-# use LWP::Debug qw(+);
+
 use OurNet::Site;
 use HTTP::Request::Common;
 use LWP::Parallel::UserAgent;
